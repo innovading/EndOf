@@ -26,7 +26,6 @@ if ($dayChanged)
         Set-Location $location
         & .\EndOfDay.ps1
     }
-    [System.IO.File]::WriteAllText("EndOfDay.txt", $day)
 }
 
 Set-Location $PSScriptRoot
@@ -48,6 +47,14 @@ if ($weekChanged)
         Set-Location $location
         & .\EndOfWeek.ps1
     }
-    [System.IO.File]::WriteAllText("EndOfWeek.txt", $week)
 }
 
+if ($dayChanged)
+{
+    [System.IO.File]::WriteAllText("EndOfDay.txt", $day)
+}
+
+if ($weekChanged)
+{
+    [System.IO.File]::WriteAllText("EndOfWeek.txt", $week)
+}
