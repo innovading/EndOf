@@ -4,6 +4,8 @@ $now = [System.DateTime]::UtcNow
 $day = $now.Date.ToString("yyyy-MM-dd")
 $week = $now.Date.AddDays(-$now.DayOfWeek).ToString("yyyy-MM-dd")
 
+Set-Location $PSScriptRoot
+
 if ([System.IO.File]::Exists("EndOf.Day.txt") -and $day -eq [System.IO.File]::ReadAllText("EndOf.Day.txt"))
 {
     $dayChanged = $false;
@@ -32,6 +34,8 @@ if ($weekChanged)
     Set-Location $PSScriptRoot
     & .\EndOfWeek.ps1
 }
+
+Set-Location $PSScriptRoot
 
 if ($dayChanged)
 {
