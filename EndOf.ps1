@@ -15,6 +15,7 @@ Set-Location $PSScriptRoot
 
 if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]::ReadAllText("EndOf.Week.txt")))
 {
+    $weekChanged = $true
     foreach ($search in $searches)
     {
         foreach ($config in Get-ChildItem -Filter "EndOfWeek.Instructions.config" -File -Recurse -Path $search)
@@ -24,9 +25,14 @@ if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]:
         }
     }
 }
+else
+{
+    $weekChanged = $false;
+}
 
 if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::ReadAllText("EndOf.Day.txt")))
 {
+    $dayChanged = $true;
     foreach ($search in $searches)
     {
         foreach ($config in Get-ChildItem -Filter "EndOfDay.Instructions.config" -File -Recurse -Path $search)
@@ -35,6 +41,10 @@ if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::R
             $args.Add('"' + $config.FullName + '"')
         }
     }
+}
+else
+{
+    $dayChanged = $false;
 }
 
 if ($args.Count -gt 0)
