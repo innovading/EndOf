@@ -1,52 +1,55 @@
 (Get-Process -Id $pid).PriorityClass = "Idle"
 
 $starting = [System.DateTime]::UtcNow
-$day = $starting.Date.ToString("yyyy-MM-dd")
 $week = $starting.Date.AddDays(-$starting.DayOfWeek).ToString("yyyy-MM-dd")
+$day = $starting.Date.ToString("yyyy-MM-dd")
+
+$searches = @(
+)
+
+$args = New-Object System.Collections.Generic.List[string]
 
 Set-Location $PSScriptRoot
 
 [System.IO.File]::WriteAllText("EndOf.Starting.txt", $starting.ToString("yyyy-MM-dd HH:mm:ss.fff"))
 
-if ([System.IO.File]::Exists("EndOf.Day.txt") -and $day -eq [System.IO.File]::ReadAllText("EndOf.Day.txt"))
+if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]::ReadAllText("EndOf.Week.txt")))
 {
-    $dayChanged = $false;
-}
-else
-{
-    $dayChanged = $true;
-}
-if ([System.IO.File]::Exists("EndOf.Week.txt") -and $week -eq [System.IO.File]::ReadAllText("EndOf.Week.txt"))
-{
-    $weekChanged = $false;
-}
-else
-{
-    $weekChanged = $true;
+    foreach ($search in $searches)
+    {
+        $args.Add("-Instructionss")
+        $args.Add($search)
+        $args.Add("EndOfWeek.Instructions.config")
+        $args.Add("AllDirectories")
+    }
 }
 
-if ($dayChanged)
+if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::ReadAllText("EndOf.Day.txt")))
 {
-    Set-Location $PSScriptRoot
-    & .\EndOfDay.ps1
+    foreach ($search in $searches)
+    {
+        $args.Add("-Instructionss")
+        $args.Add($search)
+        $args.Add("EndOfDay.Instructions.config")
+        $args.Add("AllDirectories")
+    }
 }
 
-if ($weekChanged)
+if ($args.Count -gt 0)
 {
-    Set-Location $PSScriptRoot
-    & .\EndOfWeek.ps1
+    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "C:\Innovoft\ProcessPipeline\Pipeline.config" $args
 }
 
 Set-Location $PSScriptRoot
 
-if ($dayChanged)
-{
-    [System.IO.File]::WriteAllText("EndOf.Day.txt", $day)
-}
-
 if ($weekChanged)
 {
     [System.IO.File]::WriteAllText("EndOf.Week.txt", $week)
+}
+
+if ($dayChanged)
+{
+    [System.IO.File]::WriteAllText("EndOf.Day.txt", $day)
 }
 
 $finished = [System.DateTime]::UtcNow
