@@ -49,4 +49,8 @@ if ($weekChanged)
     [System.IO.File]::WriteAllText("EndOf.Week.txt", $week)
 }
 
-[System.IO.File]::WriteAllText("EndOf.Finished.txt", [System.DateTime]::UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+$finished = [System.DateTime]::UtcNow
+[System.IO.File]::WriteAllText("EndOf.Finished.txt", $finished.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+
+$elapsed = $finished - $starting
+[System.IO.File]::WriteAllText("EndOf.Elapsed.txt", $elapsed)
