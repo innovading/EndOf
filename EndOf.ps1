@@ -1,12 +1,12 @@
 (Get-Process -Id $pid).PriorityClass = "Idle"
 
-$now = [System.DateTime]::UtcNow
-$day = $now.Date.ToString("yyyy-MM-dd")
-$week = $now.Date.AddDays(-$now.DayOfWeek).ToString("yyyy-MM-dd")
+$starting = [System.DateTime]::UtcNow
+$day = $starting.Date.ToString("yyyy-MM-dd")
+$week = $starting.Date.AddDays(-$starting.DayOfWeek).ToString("yyyy-MM-dd")
 
 Set-Location $PSScriptRoot
 
-[System.IO.File]::WriteAllText("EndOf.Starting.txt", $now.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+[System.IO.File]::WriteAllText("EndOf.Starting.txt", $starting.ToString("yyyy-MM-dd HH:mm:ss.fff"))
 
 if ([System.IO.File]::Exists("EndOf.Day.txt") -and $day -eq [System.IO.File]::ReadAllText("EndOf.Day.txt"))
 {
