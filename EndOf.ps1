@@ -6,6 +6,8 @@ $week = $now.Date.AddDays(-$now.DayOfWeek).ToString("yyyy-MM-dd")
 
 Set-Location $PSScriptRoot
 
+[System.IO.File]::WriteAllText("EndOf.Starting.txt", $now.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+
 if ([System.IO.File]::Exists("EndOf.Day.txt") -and $day -eq [System.IO.File]::ReadAllText("EndOf.Day.txt"))
 {
     $dayChanged = $false;
