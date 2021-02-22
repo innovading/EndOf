@@ -18,10 +18,13 @@ if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]:
     $weekChanged = $true
     foreach ($search in $searches)
     {
-        foreach ($config in Get-ChildItem -Filter "EndOfWeek.Instructions.config" -File -Recurse -Path $search)
+        if (Test-Path $search -PathType Container)
         {
-            $args.Add("-Instructions")
-            $args.Add('"' + $config.FullName + '"')
+            foreach ($config in Get-ChildItem -Filter "EndOfWeek.Instructions.config" -File -Recurse -Path $search)
+            {
+                $args.Add("-Instructions")
+                $args.Add('"' + $config.FullName + '"')
+            }
         }
     }
 }
@@ -35,10 +38,13 @@ if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::R
     $dayChanged = $true;
     foreach ($search in $searches)
     {
-        foreach ($config in Get-ChildItem -Filter "EndOfDay.Instructions.config" -File -Recurse -Path $search)
+        if (Test-Path $search -PathType Container)
         {
-            $args.Add("-Instructions")
-            $args.Add('"' + $config.FullName + '"')
+            foreach ($config in Get-ChildItem -Filter "EndOfDay.Instructions.config" -File -Recurse -Path $search)
+            {
+                $args.Add("-Instructions")
+                $args.Add('"' + $config.FullName + '"')
+            }
         }
     }
 }
