@@ -7,7 +7,7 @@ $day = $starting.Date.ToString("yyyy-MM-dd")
 $searches = @(
 )
 
-$args = New-Object System.Collections.Generic.List[string]
+$instructions = New-Object System.Collections.Generic.List[string]
 
 Set-Location $PSScriptRoot
 
@@ -22,8 +22,7 @@ if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]:
         {
             foreach ($config in Get-ChildItem -Filter "EndOfWeek.Instructions.config" -File -Recurse -Path $search)
             {
-                $args.Add("-Instructions")
-                $args.Add('"' + $config.FullName + '"')
+                $instructions.Add($config.FullName)
             }
         }
     }
@@ -42,8 +41,7 @@ if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::R
         {
             foreach ($config in Get-ChildItem -Filter "EndOfDay.Instructions.config" -File -Recurse -Path $search)
             {
-                $args.Add("-Instructions")
-                $args.Add('"' + $config.FullName + '"')
+                $instructions.Add($config.FullName)
             }
         }
     }
@@ -53,9 +51,10 @@ else
     $dayChanged = $false;
 }
 
-if ($args.Count -gt 0)
+if ($instructions.Count -gt 0)
 {
-    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "C:\Innovoft\ProcessPipeline\Pipeline.config" $args
+    [System.IO.File]::WriteAllLines("EndOf.Instructions.txt", $instructions)
+    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.log" -LogFlush true -InstructionsTXT "EndOf.Instructions.txt"
 }
 
 Set-Location $PSScriptRoot
