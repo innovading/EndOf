@@ -10,8 +10,7 @@ $searches = @(
 $instructions = New-Object System.Collections.Generic.List[string]
 
 Set-Location $PSScriptRoot
-
-[System.IO.File]::WriteAllText("EndOf.Starting.txt", $starting.ToString("yyyy-MM-dd HH:mm:ss.fff"))
+[System.Environment]::CurrentDirectory = $PSScriptRoot
 
 if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]::ReadAllText("EndOf.Week.txt")))
 {
@@ -57,8 +56,6 @@ if ($instructions.Count -gt 0)
     & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.log" -LogFlush true -InstructionsTXT "EndOf.Instructions.txt"
 }
 
-Set-Location $PSScriptRoot
-
 if ($weekChanged)
 {
     [System.IO.File]::WriteAllText("EndOf.Week.txt", $week)
@@ -68,9 +65,3 @@ if ($dayChanged)
 {
     [System.IO.File]::WriteAllText("EndOf.Day.txt", $day)
 }
-
-$finished = [System.DateTime]::UtcNow
-[System.IO.File]::WriteAllText("EndOf.Finished.txt", $finished.ToString("yyyy-MM-dd HH:mm:ss.fff"))
-
-$elapsed = $finished - $starting
-[System.IO.File]::WriteAllText("EndOf.Elapsed.txt", $elapsed)
