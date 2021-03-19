@@ -4,27 +4,18 @@ $now = [System.DateTime]::UtcNow
 $week = $now.Date.AddDays(-$now.DayOfWeek).ToString("yyyy-MM-dd")
 $day = $now.Date.ToString("yyyy-MM-dd")
 
-$searches = @(
-)
-
-$instructions = New-Object System.Collections.Generic.List[string]
-
 Set-Location $PSScriptRoot
 [System.Environment]::CurrentDirectory = $PSScriptRoot
+
+$args = New-Object System.Collections.Generic.List[string]
 
 if (![System.IO.File]::Exists("EndOf.Week.txt") -or ($week -ne [System.IO.File]::ReadAllText("EndOf.Week.txt")))
 {
     $weekChanged = $true
-    foreach ($search in $searches)
-    {
-        if (Test-Path $search -PathType Container)
-        {
-            foreach ($config in Get-ChildItem -Filter "EndOfWeek.Instructions.config" -File -Recurse -Path $search)
-            {
-                $instructions.Add($config.FullName)
-            }
-        }
-    }
+    $args.Add("-InstructionsSearchs")
+    $args.Add("EndOf.Paths.txt")
+    $args.Add("EndOfWeek.Instructions.config")
+    $args.Add("AllDirectories")
 }
 else
 {
@@ -34,16 +25,10 @@ else
 if (![System.IO.File]::Exists("EndOf.Day.txt") -or ($day -ne [System.IO.File]::ReadAllText("EndOf.Day.txt")))
 {
     $dayChanged = $true;
-    foreach ($search in $searches)
-    {
-        if (Test-Path $search -PathType Container)
-        {
-            foreach ($config in Get-ChildItem -Filter "EndOfDay.Instructions.config" -File -Recurse -Path $search)
-            {
-                $instructions.Add($config.FullName)
-            }
-        }
-    }
+    $args.Add("-InstructionsSearchs")
+    $args.Add("EndOf.Paths.txt")
+    $args.Add("EndOfDay.Instructions.config")
+    $args.Add("AllDirectories")
 }
 else
 {
@@ -52,8 +37,7 @@ else
 
 if ($instructions.Count -gt 0)
 {
-    [System.IO.File]::WriteAllLines("EndOf.Instructions.txt", $instructions)
-    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{LCL:yyyyMMdd}.log" -LogFlush true -InstructionsTXT "EndOf.Instructions.txt"
+    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{LCL:yyyyMMdd}.log" -LogFlush true -args
 }
 
 if ($weekChanged)
