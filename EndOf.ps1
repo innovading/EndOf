@@ -53,7 +53,7 @@ else
 if ($instructions.Count -gt 0)
 {
     [System.IO.File]::WriteAllLines("EndOf.Instructions.txt", $instructions)
-    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.log" -LogFlush true -InstructionsTXT "EndOf.Instructions.txt"
+    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{LCL:yyyyMMdd}.log" -LogFlush true -InstructionsTXT "EndOf.Instructions.txt"
 }
 
 if ($weekChanged)
