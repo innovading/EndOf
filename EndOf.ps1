@@ -37,7 +37,7 @@ else
 
 if ($args.Count -gt 0)
 {
-    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{LCL:yyyyMMdd}.log" -LogFlush true $args
+    & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{UTC:yyyyMMddHHmm}.log" -LogFlush true $args
 }
 
 if ($weekChanged)
