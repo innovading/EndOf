@@ -35,7 +35,7 @@ else
     $dayChanged = $false;
 }
 
-if ($instructions.Count -gt 0)
+if ($args.Count -gt 0)
 {
     & \Innovoft\ProcessPipeline\ProcessPipeline.exe -Pipeline "\Innovoft\ProcessPipeline\Pipeline.config" -Log "EndOf.{LCL:yyyyMMdd}.log" -LogFlush true -args
 }
