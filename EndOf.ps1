@@ -1,8 +1,8 @@
 (Get-Process -Id $pid).PriorityClass = "Idle"
 
-$starting = [System.DateTime]::UtcNow
-$week = $starting.Date.AddDays(-$starting.DayOfWeek).ToString("yyyy-MM-dd")
-$day = $starting.Date.ToString("yyyy-MM-dd")
+$now = [System.DateTime]::UtcNow
+$week = $now.Date.AddDays(-$now.DayOfWeek).ToString("yyyy-MM-dd")
+$day = $now.Date.ToString("yyyy-MM-dd")
 
 $searches = @(
 )
